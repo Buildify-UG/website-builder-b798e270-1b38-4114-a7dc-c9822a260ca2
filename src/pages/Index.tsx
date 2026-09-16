@@ -1,8 +1,34 @@
 
-import React from 'react';
-import { Heart, MessageCircle, Share2, Search, Home, Compass, MessageSquare, User } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Heart, MessageCircle, Share2, Search, Upload as UploadIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
 
 const Index = () => {
+  const [uploadedVideos, setUploadedVideos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('videos')
+          .select('id, leader_name, title, views, likes, created_at')
+          .order('created_at', { ascending: false })
+          .limit(4);
+        
+        if (error) throw error;
+        setUploadedVideos(data || []);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVideos();
+  }, []);
+
   const leaders = [
     { name: 'Bishop David Oyedepo', role: 'Bishop', videos: '2.4M', followers: '8.5M' },
     { name: 'Pastor David Oyedepo', role: 'Pastor', videos: '1.8M', followers: '6.2M' },
@@ -42,9 +68,17 @@ const Index = () => {
               />
             </div>
           </div>
-          <button className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
-            Sign In
-          </button>
+          <div className="flex items-center gap-3">
+            <Link to="/upload">
+              <button className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition flex items-center gap-2">
+                <UploadIcon className="w-4 h-4" />
+                Upload
+              </button>
+            </Link>
+            <button className="px-6 py-2 bg-slate-800 border border-purple-500/30 text-white rounded-full font-semibold hover:border-purple-500/60 transition">
+              Sign In
+            </button>
+          </div>
         </div>
       </header>
 
@@ -78,6 +112,48 @@ const Index = () => {
             ))}
           </div>
         </div>
+
+        {/* Recently Uploaded Videos */}
+        {uploadedVideos.length > 0 && (
+          <div className="mb-16">
+            <h3 className="text-3xl font-bold text-white mb-8">Recently Uploaded</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {uploadedVideos.map((video) => (
+                <div key={video.id} className="bg-gradient-to-br from-slate-800 to-slate-900 border border-purple-500/30 rounded-xl overflow-hidden hover:border-purple-500/60 transition cursor-pointer group">
+                  <div className="bg-gradient-to-br from-purple-600 to-pink-600 h-40 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition flex items-center justify-center">
+                      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition">
+                        <div className="w-0 h-0 border-l-8 border-l-white border-t-5 border-t-transparent border-b-5 border-b-transparent ml-1"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-sm text-purple-300 mb-2">{video.leader_name}</p>
+                    <h4 className="text-lg font-bold text-white mb-4">{video.title}</h4>
+                    <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
+                      <span>{video.views || 0} views</span>
+                      <span>{video.likes || 0} likes</span>
+                    </div>
+                    <div className="flex items-center gap-4 text-gray-400">
+                      <button className="flex items-center gap-2 hover:text-pink-500 transition">
+                        <Heart className="w-5 h-5" />
+                        <span className="text-xs">Like</span>
+                      </button>
+                      <button className="flex items-center gap-2 hover:text-purple-500 transition">
+                        <MessageCircle className="w-5 h-5" />
+                        <span className="text-xs">Comment</span>
+                      </button>
+                      <button className="flex items-center gap-2 hover:text-purple-500 transition">
+                        <Share2 className="w-5 h-5" />
+                        <span className="text-xs">Share</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Trending Videos */}
         <div className="mb-16">
