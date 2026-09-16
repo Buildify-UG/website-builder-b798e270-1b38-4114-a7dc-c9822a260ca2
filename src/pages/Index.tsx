@@ -59,14 +59,17 @@ const Index = () => {
             <h1 className="text-2xl font-bold text-white">Christ Tok</h1>
           </div>
           <div className="flex-1 max-w-md mx-8">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search leaders, teachings..."
-                className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-purple-500/30 rounded-full text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
-              />
-            </div>
+            <Link to="/explore">
+              <div className="relative cursor-pointer">
+                <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search leaders, teachings..."
+                  className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-purple-500/30 rounded-full text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                  readOnly
+                />
+              </div>
+            </Link>
           </div>
           <div className="flex items-center gap-3">
             <Link to="/upload">
@@ -75,9 +78,11 @@ const Index = () => {
                 Upload
               </button>
             </Link>
-            <button className="px-6 py-2 bg-slate-800 border border-purple-500/30 text-white rounded-full font-semibold hover:border-purple-500/60 transition">
-              Sign In
-            </button>
+            <Link to="/auth">
+              <button className="px-6 py-2 bg-slate-800 border border-purple-500/30 text-white rounded-full font-semibold hover:border-purple-500/60 transition">
+                Sign In
+              </button>
+            </Link>
           </div>
         </div>
       </header>
@@ -87,9 +92,11 @@ const Index = () => {
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold text-white mb-4">Welcome to Your Spiritual Community</h2>
           <p className="text-xl text-gray-300 mb-8">Learn from renowned faith leaders. Grow in your spiritual journey.</p>
-          <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
-            Explore Content
-          </button>
+          <Link to="/explore">
+            <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
+              Explore Content
+            </button>
+          </Link>
         </div>
 
         {/* Featured Leaders */}
@@ -214,9 +221,11 @@ const Index = () => {
         {/* CTA */}
         <div className="text-center py-12">
           <h3 className="text-3xl font-bold text-white mb-4">Ready to Join Our Community?</h3>
-          <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
-            Enter Christ Tok
-          </button>
+          <Link to="/auth">
+            <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
+              Enter Christ Tok
+            </button>
+          </Link>
         </div>
       </section>
 
